@@ -1,0 +1,142 @@
+
+*{ 
+    margin:0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+
+body {
+    font-family: 'Michroma', sans-serif; 
+    font-weight: 400;
+    font-style: normal;
+  }
+
+body{ 
+    height: 100vh; 
+    background:url("GOTHAN.svg"); 
+    background-size: cover; 
+    background-repeat: no-repeat;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+main{ 
+    color: #ffffff;
+    border-radius: 5px; 
+    box-shadow: 1px 4px 10px rgb(186, 8, 8); 
+    width: 30%; 
+    height: 70%; 
+    position: absolute; 
+    top: 10%;
+    backdrop-filter: blur(10px); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-family: 'Michroma', sans-serif; 
+    flex-direction: column; 
+    gap:1rem; 
+}
+
+main input{ 
+    
+    width: 170% ; 
+    padding: 0.7rem; 
+    border: none; 
+    border-radius: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    right: 30%;
+    text-align: center;
+   
+  
+}
+
+input::placeholder{ 
+    
+    font-family: 'Michroma', sans-serif; 
+    font-weight: 80; 
+    text-align: center;
+}
+
+main img{ 
+    width: 20%; 
+}
+.botoes{ 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column; 
+    gap: 1rem; 
+    width: 70%; 
+}
+
+.botoes button{ 
+
+    width: 170%; 
+    padding: 0.7rem; 
+    border: none;
+    border-radius: 5px; 
+    font-family: 'Michroma', sans-serif; 
+    font-weight: 800; 
+    box-shadow: 1px 4px 10px rgb(169, 169, 173); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    left: 25%;
+    text-align: center;
+}
+
+
+
+#entrar{ 
+
+    background-color: rgb(100, 99, 102);
+}
+
+#entrar:active{ 
+    background-color:#3f3e3e; 
+}
+
+@media (max-width: 768px) {
+    main {
+        width: 50%; /* Ajusta o tamanho do formulário para telas menores */
+        height: auto;
+    }
+
+    main input, .botoes button {
+        width: 100%; /* Ajusta os inputs e botões para 100% da largura */
+        right: 0;
+        left: 0;
+    }
+
+    .botoes button {
+        left: 0; /* Remove a margem do botão */
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        width: 80%; /* Aumenta a largura do formulário em dispositivos móveis */
+        top: 5%; /* Ajusta a posição do formulário */
+    }
+
+    main input {
+        width: 100%; /* Garante que os inputs ocupem toda a largura disponível */
+        padding: 0.5rem; /* Ajusta o padding para dispositivos pequenos */
+    }
+
+    .botoes button {
+        width: 100%; /* Ajusta os botões para ocupar toda a largura */
+    }
+
+    main img {
+        width: 40%; /* Ajusta a largura da imagem para dispositivos menores */
+    }
+}
