@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     const equipamentoForm = document.getElementById('equipamentoForm');
     const equipamentoTableBody = document.getElementById('equipamentoTable');
+    const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    let editId = null;
 
-    // Função para adicionar um novo equipamento
+    // Adicionar Equipamento
     equipamentoForm.addEventListener('submit', function (event) {
         event.preventDefault();
-
+        
         const nome = document.getElementById('nomeEquipamento').value;
         const categoria = document.getElementById('categoria').value;
         const status = parseInt(document.getElementById('status').value);
@@ -16,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({ nome, categoria, status })
         })
         .then(response => response.json())
-        .then(data => {
+        .then(() => {
             alert("Equipamento adicionado com sucesso!");
             listarEquipamentos();
             equipamentoForm.reset();
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Erro ao adicionar equipamento:', error));
     });
 
-    // Função para listar os equipamentos
+    // Listar Equipamentos
     function listarEquipamentos() {
         fetch('http://127.0.0.1:5000/equipamentos')
         .then(response => response.json())
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Erro ao listar equipamentos:', error));
     }
 
-    // Função para editar um equipamento
+    // Editar Equipamento
     window.editEquipamento = function(id) {
         fetch(`http://127.0.0.1:5000/equipamentos/${id}`)
         .then(response => response.json())
@@ -55,17 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('editNome').value = equipamento.nome;
             document.getElementById('editCategoria').value = equipamento.categoria;
             document.getElementById('editStatus').value = equipamento.status.toString();
-
-            const modalElement = document.getElementById('editModal');
-            const myModal = new bootstrap.Modal(modalElement);
-            myModal.show();
-
-            // Removendo eventos antigos para evitar múltiplas chamadas
-            const saveButton = document.getElementById('saveEdit');
-            saveButton.replaceWith(saveButton.cloneNode(true));
-            document.getElementById('saveEdit').addEventListener('click', function () {
-                salvarEdicao(id, myModal);
-            });
+            editId = id; // Guardar ID
+            editModal.show();
         })
         .catch(error => {
             console.error('Erro ao carregar equipamento para edição:', error);
@@ -73,39 +66,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Função para salvar edição
-    function salvarEdicao(id, modalInstance) {
+    // Salvar Edição
+    document.getElementById('saveEdit').addEventListener('click', function () {
+        if (editId === null) return;
+
         const nome = document.getElementById('editNome').value;
         const categoria = document.getElementById('editCategoria').value;
         const status = parseInt(document.getElementById('editStatus').value);
 
-        fetch(`http://127.0.0.1:5000/equipamentos/${id}`, {
+        fetch(`http://127.0.0.1:5000/equipamentos/${editId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nome, categoria, status })
         })
         .then(response => response.json())
-        .then(data => {
+        .then(() => {
             alert('Equipamento atualizado com sucesso!');
             listarEquipamentos();
-            const modalElement = document.getElementById('editModal');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            modal.hide(); // Fechar modal corretamente
+            editModal.hide();
         })
         .catch(error => {
             console.error('Erro ao atualizar equipamento:', error);
             alert('Erro ao atualizar equipamento');
         });
-    }
+    });
 
-    // Função para excluir um equipamento
+    // Excluir Equipamento
     window.deleteEquipamento = function(id) {
         if (confirm('Tem certeza que deseja excluir este equipamento?')) {
             fetch(`http://127.0.0.1:5000/equipamentos/${id}`, {
                 method: 'DELETE'
             })
             .then(response => response.json())
-            .then(data => {
+            .then(() => {
                 alert('Equipamento excluído com sucesso!');
                 listarEquipamentos();
             })
