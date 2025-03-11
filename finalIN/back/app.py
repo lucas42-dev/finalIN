@@ -151,9 +151,21 @@ def get_equipamento(id):
 @app.route('/equipamentos/<int:id>', methods=['PUT'])
 def update_equipamento(id):
     data = request.get_json()
+    
+    if not data:
+        return jsonify({'message': 'Dados não fornecidos!'}), 400
+    
     nome = data.get('nome')
-    categoria = data.get('categoria').upper()
-    status = int(data.get('status', 1))
+    categoria = data.get('categoria')
+    status = data.get('status', 1)  # Padrão 1 se não informado
+
+    if categoria:
+        categoria = categoria.upper()
+    
+    try:
+        status = int(status)
+    except ValueError:
+        return jsonify({'message': 'Status inválido!'}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -164,7 +176,10 @@ def update_equipamento(id):
         conn.close()
         return jsonify({'message': 'Equipamento não encontrado!'}), 404
 
-    cursor.execute('UPDATE Equipamentos SET nome = ?, categoria = ?, status = ? WHERE id = ?', (nome, categoria, status, id))
+    cursor.execute(
+        'UPDATE Equipamentos SET nome = ?, categoria = ?, status = ? WHERE id = ?',
+        (nome, categoria, status, id)
+    )
     conn.commit()
     conn.close()
 
